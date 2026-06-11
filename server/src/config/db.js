@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
 
-async function connectDB() {
-  if (!process.env.DB_URL) {
-    throw new Error('DB_URL is not defined');
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI); // Changed from DB_URL
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`❌ Error connecting to MongoDB: ${error.message}`);
+    process.exit(1);
   }
-
-  await mongoose.connect(process.env.DB_URL);
-}
+};
 
 module.exports = connectDB;
